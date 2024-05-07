@@ -9,9 +9,8 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
-from pathlib import Path
 import os
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,7 +20,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-qz-zvuxuygn_j=6(&*v-okz5e0kw)h*q&+@_^=x(3l930pjx)_'
+SECRET_KEY = 'django-insecure-8-ub$ga&15g#f6yfa3&*2_jdn4jih978*#ptbov=2^1*2b%3oi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,8 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'appsico_app'
+    'appsico_app',
+    'users'
 ]
+
+AUTH_USER_MODEL = "users.CustomUser"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -52,7 +54,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'appsico_project.urls'
-LOGOUT_REDIRECT_URL = 'app:index'
 
 TEMPLATES = [
     {
