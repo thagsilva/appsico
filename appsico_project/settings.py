@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -22,14 +21,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-slo6y66gj1g+48&at2$3a^(y1xwu3&4%ltzo1^4^$x3&e@*4^$'
+SECRET_KEY = 'django-insecure-qz-zvuxuygn_j=6(&*v-okz5e0kw)h*q&+@_^=x(3l930pjx)_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'appsico_app.BaseUser'
 
 # Application definition
 
@@ -40,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'appsico_app',
+    'appsico_app'
 ]
 
 MIDDLEWARE = [
@@ -54,7 +52,7 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'appsico_project.urls'
-LOGOUT_REDIRECT_URL = 'appsico_app:index'
+LOGOUT_REDIRECT_URL = 'app:index'
 
 TEMPLATES = [
     {
