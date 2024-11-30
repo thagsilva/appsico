@@ -5,7 +5,6 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.decorators import login_required
 
 
-
 app_name = 'appsico_app'
 
 urlpatterns = [
