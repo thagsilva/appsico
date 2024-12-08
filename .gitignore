@@ -1,2 +1,5 @@
 venv_appsico
+.venv
+*\__pycache__
+LIXO.ipynb
 
