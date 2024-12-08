@@ -8,5 +8,8 @@ from django.contrib.auth.decorators import login_required
 app_name = 'appsico_app'
 
 urlpatterns = [
+    path('register/', UserRegistrationView.as_view(), name='register'),
+    path('doctor/register/', DoctorRegistrationView.as_view(), name='doctor_register'),
+    path('patient/register/', PatientRegistrationView.as_view(), name='patient_register'),
     
 ]

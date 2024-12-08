@@ -13,7 +13,7 @@ class TRANSACTIONS_STATUS(str, Enum):
     
 class CustomUser(AbstractUser):
     
-    is_psicologist = models.BooleanField(default=False)
+    is_psychologist = models.BooleanField(default=False)
     is_patient = models.BooleanField(default=False)
     is_receptionist = models.BooleanField(default=False)
     
@@ -92,7 +92,7 @@ class Doctors(CustomUser):
         on_delete = models.CASCADE
     )
     
-    is_psicologist = True    
+    is_psychologist = True    
    
     def __str__(self) -> str:
         return self.user_name, self.email, self.crp
@@ -117,7 +117,7 @@ class Doctors(CustomUser):
             pat.phonenumber = cls.phonenumber
             pat.cpf = cls.cpf
             pat.user_name = cls.user_name
-            pat.is_psicologist = True
+            pat.is_psychologist = True
             
             pat.save()
        

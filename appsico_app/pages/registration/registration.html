@@ -1,0 +1,15 @@
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <label for="is_psicologist">Doctor</label>
+    <input type="checkbox" name="is_doctor" id="is_doctor">
+    
+    <label for="is_patient">Patient</label>
+    <input type="checkbox" name="is_patient" id="is_patient">
+    
+    <label for="is_receptionist">Receptionist</label>
+    <input type="checkbox" name="is_receptionist" id="is_receptionist">
+
+    <button type="submit">Register</button>
+</form>
