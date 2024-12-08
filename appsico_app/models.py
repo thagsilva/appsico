@@ -1,6 +1,6 @@
 from django.db import models
 from django.core import validators
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 import re
 from enum import Enum
 
@@ -10,25 +10,14 @@ class TRANSACTIONS_STATUS(str, Enum):
     IN_PAYMENT = "IN_PAYMENT"
     START_PROCESS = "START_PROCESS"
     
-
-class Patients(User):
-      
-    phonenumber = models.CharField(
-    verbose_name= 'Número de telefone', 
-    max_length=30,
-    unique=True,
-    help_text='Ex.: (XX)XXXX-XXXX', 
-    validators=[validators.RegexValidator(re.compile(r'^\([0-9]{2}\)[0-9]{4,5}-[0-9]{4}$'),
-                                            'Insira um número válido', 'Inválido')]
-    )
-
-    address = models.CharField(
-        verbose_name='Endereço', 
-        max_length=30,
-        unique=True,
-        help_text='Ex.: Rua/Av. XXX, NºXX, Complemento (se houver) - Bairro, Cidade, Estado - CEP',
-    )
-     
+    
+class CustomUser(AbstractUser):
+    
+    is_psicologist = models.BooleanField(default=False)
+    is_patient = models.BooleanField(default=False)
+    is_receptionist = models.BooleanField(default=False)
+    
+   
     user_name = models.CharField(
         verbose_name = 'Nome', 
         max_length = 30,
@@ -46,22 +35,33 @@ class Patients(User):
                                                'Insira um número válido', 'Inválido')]
     )
     
-    is_psicologist = models.BooleanField(default=False)
+    phonenumber = models.CharField(
+    verbose_name= 'Número de telefone', 
+    max_length=30,
+    unique=True,
+    help_text='Ex.: (XX)XXXX-XXXX', 
+    validators=[validators.RegexValidator(re.compile(r'^\([0-9]{2}\)[0-9]{4,5}-[0-9]{4}$'),
+                                            'Insira um número válido', 'Inválido')]
+    )
+
+
+class Patients(CustomUser):
+      
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='patients_profile'
+    )
+
+    address = models.CharField(
+        verbose_name='Endereço', 
+        max_length=30,
+        unique=True,
+        help_text='Ex.: Rua/Av. XXX, NºXX, Complemento (se houver) - Bairro, Cidade, Estado - CEP',
+    )
     
     is_patient = True
-    
-    is_superuser = False
-    
-    is_staff = False
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [
-        'cpf',
-        'user_name',
-        'phonenumber'
-    ]
-    
-    
+           
     def __str__(self) -> str:
         return self.user_name, self.email, self.cpf
     
@@ -70,34 +70,14 @@ class Patients(User):
         verbose_name_plural = 'Pacientes'
         
     
-class Doctors(User):
+class Doctors(CustomUser):
+    
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='doctors_profile'
+    )
        
-    phonenumber = models.CharField(
-    verbose_name='Número de telefone', 
-    max_length=30,
-    unique=True,
-    help_text='Ex.: (XX)XXXX-XXXX', 
-    validators=[validators.RegexValidator(re.compile(r'^\([0-9]{2}\)[0-9]{4,5}-[0-9]{4}$'),
-                                            'Insira um número válido', 'Inválido')]
-    )
-     
-    user_name = models.CharField(
-        verbose_name = 'Nome', 
-        max_length = 30,
-        help_text = 'Insira seu nome completo. Ex.: João Santos Silva', 
-        validators = [ validators.RegexValidator(re.compile(r''), 'Insira um nome válido', 'Inválido')]
-    )
-    
-    cpf = models.CharField(
-        verbose_name ='CPF',
-        primary_key = True,
-        max_length = 30,
-        unique = True,
-        help_text ='XXX.XXX.XXX-XX', 
-        validators = [validators.RegexValidator(re.compile(r'^(?:[0-9]{3}[\.|-]){3}[0-9]{2}$'),
-                                               'Insira um número válido', 'Inválido')]
-    )
-    
     crp = models.CharField(
         verbose_name='CRP',
         max_length=30,
@@ -112,25 +92,8 @@ class Doctors(User):
         on_delete = models.CASCADE
     )
     
-    
-    is_psicologist = True
-    
-    is_patient = models.BooleanField(default=False)
-      
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [
-        'crp',
-        'cpf',
-        'user_name',
-        'phonenumber',
-        'patients',
-        'is_patient',
-        'is_superuser',
-        'is_staff'
-    ]
-    
-    
+    is_psicologist = True    
+   
     def __str__(self) -> str:
         return self.user_name, self.email, self.crp
       
@@ -159,40 +122,16 @@ class Doctors(User):
             pat.save()
        
         
-class Receptionist(User):
+class Receptionist(CustomUser):
+    
+    user = models.OneToOneField(
+        CustomUser,
+        on_delete=models.CASCADE,
+        related_name='receptionist_profile'
+    )
           
-    user_name = models.CharField(
-        verbose_name = 'Nome', 
-        max_length = 30,
-        help_text = 'Insira seu nome completo. Ex.: João Santos Silva', 
-        validators = [ validators.RegexValidator(re.compile(r''), 'Insira um nome válido', 'Inválido')]
-    )
-    
-    cpf = models.CharField(
-        verbose_name = 'CPF',
-        primary_key = True,
-        max_length = 30,
-        unique = True,
-        help_text = 'XXX.XXX.XXX-XX', 
-        validators = [validators.RegexValidator(re.compile(r'^(?:[0-9]{3}[\.|-]){3}[0-9]{2}$'),
-                                               'Insira um número válido', 'Inválido')]
-    )
-      
-    is_psicologist = False
-    
-    is_patient = False
-    
-    is_superuser = False
-    
-    is_staff = True
-
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = [
-        'user_name',
-        'cpf'
-    ]
-    
-    
+    is_receptionist = True
+   
     def __str__(self) -> str:
         return self.user_name, self.email
     
@@ -227,7 +166,7 @@ class Calendar(models.Model):
     
     duration = models.DurationField()
     
-    data = models.DateField()
+    data = models.DateTimeField()
     
     class Meta:
         verbose_name = 'Calendário'
